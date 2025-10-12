@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - xenXgon Play{% endblock %}
+
+{% block content %}
+<div class="dashboard" data-testid="dashboard">
+    <div class="dashboard-header">
+        <h1 class="page-title">Video Library</h1>
+        <a href="{{ url_for('upload_page') }}" class="btn btn-primary" data-testid="upload-btn">
+            <span>+ Upload Video</span>
+        </a>
+    </div>
+    
+    <div class="video-grid" id="videoGrid" data-testid="video-grid">
+        {% if videos %}
+            {% for video in videos %}
+            <div class="video-card" data-video-id="{{ video.id }}" data-testid="video-card-{{ video.id }}">
+                <div class="video-thumbnail">
+                    {% if video.status == 'ready' and video.thumbnail_path %}
+                        <img src="{{ url_for('serve_video_file', video_id=video.id, filename=video.thumbnail_path) }}" alt="{{ video.original_filename }}">
+                    {% else %}
+                        <div class="thumbnail-placeholder">
+                            <span class="placeholder-icon">▶</span>
+                        </div>
+                    {% endif %}
+                    
+                    {% if video.status == 'processing' %}
+                    <div class="processing-overlay">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ video.progress }}%"></div>
+                        </div>
+                        <span class="progress-text">{{ video.progress }}%</span>
+                    </div>
+                    {% elif video.status == 'failed' %}
+                    <div class="error-overlay">
+                        <span class="error-icon">⚠</span>
+                        <span class="error-text">Failed</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="video-info">
+                    <h3 class="video-title" title="{{ video.original_filename }}">{{ video.original_filename }}</h3>
+                    
+                    <div class="video-meta">
+                        {% if video.duration %}
+                        <span class="meta-item">{{ (video.duration / 60) | round(1) }} min</span>
+                        {% endif %}
+                        {% if video.width and video.height %}
+                        <span class="meta-item">{{ video.width }}x{{ video.height }}</span>
+                        {% endif %}
+                        {% if video.watch_count > 0 %}
+                        <span class="meta-item">{{ video.watch_count }} views</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="video-actions">
+                        {% if video.status == 'ready' %}
+                        <a href="{{ url_for('watch', video_id=video.id) }}" class="btn btn-sm btn-primary" data-testid="watch-btn-{{ video.id }}">
+                            Watch
+                        </a>
+                        {% else %}
+                        <span class="status-badge status-{{ video.status }}" data-testid="status-{{ video.id }}">{{ video.status }}</span>
+                        {% endif %}
+                        
+                        <button class="btn btn-sm btn-danger" onclick="deleteVideo('{{ video.id }}')" data-testid="delete-btn-{{ video.id }}">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📹</div>
+                <h2>No videos yet</h2>
+                <p>Upload your first H.264 video to get started</p>
+                <a href="{{ url_for('upload_page') }}" class="btn btn-primary">Upload Video</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="modal" id="deleteModal">
+    <div class="modal-content">
+        <h2>Delete Video?</h2>
+        <p>This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeDeleteModal()" data-testid="cancel-delete-btn">Cancel</button>
+            <button class="btn btn-danger" onclick="confirmDelete()" data-testid="confirm-delete-btn">Delete</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script>
+    let deleteVideoId = null;
+    
+    function deleteVideo(videoId) {
+        deleteVideoId = videoId;
+        document.getElementById('deleteModal').classList.add('show');
+    }
+    
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('show');
+        deleteVideoId = null;
+    }
+    
+    function confirmDelete() {
+        if (!deleteVideoId) return;
+        
+        fetch(`/api/videos/${deleteVideoId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete video');
+        });
+        
+        closeDeleteModal();
+    }
+    
+    // Auto-refresh processing videos
+    function checkProcessingStatus() {
+        const processingCards = document.querySelectorAll('.video-card');
+        
+        processingCards.forEach(card => {
+            const videoId = card.dataset.videoId;
+            const statusElement = card.querySelector('[data-testid^="status-"]');
+            
+            if (statusElement && statusElement.textContent.trim() === 'processing') {
+                fetch(`/api/videos/${videoId}/status`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            if (data.status === 'ready' || data.status === 'failed') {
+                                location.reload();
+                            } else {
+                                const progressFill = card.querySelector('.progress-fill');
+                                const progressText = card.querySelector('.progress-text');
+                                if (progressFill && progressText) {
+                                    progressFill.style.width = data.progress + '%';
+                                    progressText.textContent = data.progress + '%';
+                                }
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Error checking status:', error));
+            }
+        });
+    }
+    
+    // Check every 2 seconds
+    setInterval(checkProcessingStatus, 2000);
+</script>
+{% endblock %}

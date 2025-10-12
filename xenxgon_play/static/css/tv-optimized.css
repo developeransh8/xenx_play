@@ -1,0 +1,137 @@
+/* TV Browser Optimizations */
+
+/* Large screens (1920px+) - TV displays */
+@media (min-width: 1920px) {
+    body {
+        font-size: 24px;
+    }
+    
+    .page-title {
+        font-size: 3.5rem;
+    }
+    
+    .btn {
+        font-size: 1.25rem;
+        padding: 1rem 2rem;
+        min-height: 64px;
+    }
+    
+    .video-js {
+        font-size: 22px;
+        height: 800px;
+    }
+    
+    .vjs-control-bar {
+        height: 4em;
+    }
+    
+    .vjs-button {
+        font-size: 2em;
+    }
+    
+    .audio-selector-btn {
+        font-size: 1.25rem;
+        padding: 1rem 1.5rem;
+        min-height: 64px;
+    }
+    
+    .audio-option {
+        font-size: 1.125rem;
+        padding: 1rem 1.5rem;
+        min-height: 64px;
+    }
+}
+
+/* Focus indicators for TV remotes */
+*:focus {
+    outline: 3px solid var(--primary);
+    outline-offset: 4px;
+}
+
+/* Remove outline for mouse users */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Enhanced focus for buttons */
+button:focus,
+a:focus,
+.btn:focus {
+    outline: 3px solid var(--primary);
+    outline-offset: 4px;
+    transform: scale(1.05);
+}
+
+/* Touch/coarse pointer devices */
+@media (pointer: coarse) {
+    /* Disable hover effects */
+    .btn:hover,
+    .nav-link:hover,
+    .video-card:hover {
+        transform: none;
+    }
+    
+    /* Larger touch targets */
+    button,
+    a,
+    input,
+    .btn {
+        min-height: 56px;
+        min-width: 56px;
+    }
+}
+
+/* D-pad navigation enhancements */
+.video-card:focus-within {
+    outline: 3px solid var(--primary);
+    outline-offset: 4px;
+    transform: scale(1.02);
+}
+
+/* Keyboard navigation for audio menu */
+.audio-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Better visibility on TV screens */
+@media (min-width: 1920px) {
+    .video-title {
+        font-size: 1.5rem;
+    }
+    
+    .video-meta,
+    .video-stats {
+        font-size: 1.125rem;
+    }
+    
+    .upload-icon,
+    .empty-icon {
+        font-size: 6rem;
+    }
+}
+
+/* High contrast for readability */
+.status-badge,
+.default-badge {
+    border: 2px solid currentColor;
+}
+
+/* Smooth transitions for TV navigation */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Prevent text selection on TV */
+@media (pointer: coarse) {
+    body {
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    
+    input,
+    textarea {
+        user-select: text;
+        -webkit-user-select: text;
+    }
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}xenXgon Play{% endblock %}</title>
+    
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tv-optimized.css') }}">
+    
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('dashboard') }}" class="logo">
+                <span class="logo-icon">▶</span>
+                <span class="logo-text">xenXgon Play</span>
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}" class="nav-link" data-testid="nav-dashboard">Dashboard</a>
+                <a href="{{ url_for('upload_page') }}" class="nav-link" data-testid="nav-upload">Upload</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Video.js JavaScript -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

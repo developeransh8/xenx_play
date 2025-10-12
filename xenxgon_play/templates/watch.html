@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}{{ video.original_filename }} - xenXgon Play{% endblock %}
+
+{% block content %}
+<div class="watch-container" data-testid="watch-container">
+    <div class="player-wrapper">
+        <video id="videoPlayer" class="video-js vjs-big-play-centered" controls preload="auto" data-testid="video-player">
+            <source src="{{ url_for('serve_video_file', video_id=video.id, filename=video.hls_master_path) }}" type="application/x-mpegURL">
+        </video>
+    </div>
+    
+    <div class="video-details">
+        {% if audio_tracks|length > 1 %}
+        <div class="audio-selector" id="audioSelector" data-testid="audio-selector">
+            <button class="audio-selector-btn" id="audioSelectorBtn" data-testid="audio-selector-btn">
+                <span class="audio-icon">🔊</span>
+                <span class="audio-text">Audio</span>
+            </button>
+            
+            <div class="audio-menu" id="audioMenu" style="display: none;">
+                {% for track in audio_tracks %}
+                <button class="audio-option {% if track.is_default %}active{% endif %}" 
+                        data-track-index="{{ track.track_index }}"
+                        data-track-language="{{ track.language or '' }}"
+                        data-track-title="{{ track.title }}"
+                        data-testid="audio-track-{{ track.track_index }}">
+                    <span class="track-name">{{ track.title }}</span>
+                    {% if track.language != 'und' %}
+                    <span class="track-lang">{{ track.language }}</span>
+                    {% endif %}
+                    {% if track.is_default %}
+                    <span class="default-badge">Default</span>
+                    {% endif %}
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <h1 class="video-title">{{ video.original_filename }}</h1>
+        
+        <div class="video-stats">
+            <span class="stat-item">{{ (video.duration / 60) | round(1) }} minutes</span>
+            <span class="stat-item">{{ video.width }}x{{ video.height }}</span>
+            <span class="stat-item">{{ video.fps | round(0) }} fps</span>
+            <span class="stat-item">{{ video.watch_count }} views</span>
+        </div>
+        
+        <div class="video-info-grid">
+            <div class="info-item">
+                <span class="info-label">Video Codec</span>
+                <span class="info-value">{{ video.video_codec.upper() }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Audio Tracks</span>
+                <span class="info-value">{{ audio_tracks|length }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">File Size</span>
+                <span class="info-value">{{ (video.file_size / 1024 / 1024) | round(0) }} MB</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/player.js') }}"></script>
+<script>
+    // Initialize player
+    const videoId = '{{ video.id }}';
+    const audioTracks = {{ audio_tracks | tojson }};
+    
+    // Increment watch count
+    fetch(`/api/videos/${videoId}/watch`, {
+        method: 'POST'
+    });
+</script>
+{% endblock %}
